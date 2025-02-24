@@ -14,6 +14,14 @@ if ($_POST) {
     
     if($user){
         echo "<script>alert('Email Duplicated')</script>";
+    }else{
+      $stmt = $pdo->prepare("INSERT INTO users(name,email,password)VALUES(:name,:email,:password)");
+      $result = $stmt->execute(
+        array(':name'=>$name,':email'=>$email,':password'=>$password)
+      );
+      if($result){
+        echo "<script>alert('Successfully Register,You can now login');window.location.href='login.php'</script>";
+      }
     }
 }
 

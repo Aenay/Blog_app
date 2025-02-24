@@ -1,3 +1,13 @@
+<?php 
+require 'config/config.php';
+session_start();
+if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
+  header('Location: login.php');
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,89 +37,47 @@
       </div><!-- /.container-fluid -->
     </section>
 
+    <?php 
+     
+     $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+     $stmt->execute();
+     $result = $stmt->fetchAll();
+    
+    ?>
+
     <!-- Main content -->
     <div class="row">
-          <div class="col-md-4">
+    <?php 
+    if ($result) {
+        $i = 1;
+        foreach ($result as $value) {
+    ?>
+        <div class="col-md-4">
             <!-- Box Comment -->
             <div class="card card-widget">
               <div class="card-header">
                 <div style="text-align:center !important; float: none;" class="card-title">
-                  <h4>Blog Title</h4>
+                  <h4><?php echo $value['title'] ?></h4>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                
+                <a href="blogdetail.php?id=<?php echo $value['id'];?>">
+                  <img class="img-fluid pad" src="admin/images/<?php echo $value['image']?>">
+                </a> 
               </div>
               <!-- /.card-body -->
               
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div style="text-align:center !important; float: none;" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                
-              </div>
-              <!-- /.card-body -->
-              
-            </div>
-            <!-- /.card -->
-          </div>
-          <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div style="text-align:center !important; float: none;" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                
-              </div>
-              <!-- /.card-body -->
-              
-            </div>
-            <!-- /.card -->
-          </div>
-          <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div style="text-align:center !important; float: none;" class="card-title">
-                  <h4>Blog Title</h4>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                
-              </div>
-              <!-- /.card-body -->
-              
-            </div>
-            <!-- /.card -->
-          </div>
-        </div>
+    <?php 
+        $i++;
+        }
+    }
+    ?>
+          
+  </div>
     <!-- /.content -->
 
     <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
