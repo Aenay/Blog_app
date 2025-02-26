@@ -16,10 +16,15 @@ $stmtcmt ->execute();
 $cmtResult = $stmtcmt->fetchAll();
 
 
-$authorId = $cmtResult[0]['author_id'];
-$stmtau = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
-$stmtau ->execute();
-$auResult = $stmtau->fetchAll();
+$auResult = [];
+if($cmtResult){
+  foreach ( $cmtResult as $key => $value){
+    $authorId = $cmtResult[$key]['author_id'];
+    $stmtau = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
+    $stmtau ->execute();
+    $auResult[] = $stmtau->fetchAll();
+  }
+}
 
 if ($_POST) {
   $comment = $_POST['comment'];
@@ -39,7 +44,7 @@ if ($_POST) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Widgets</title>
+  <title>Blog Details</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -84,15 +89,25 @@ if ($_POST) {
               <div class="card-footer card-comments">
                 <div class="card-comment">
                   <!-- User image -->
-                  <img class="img-circle img-sm" src="dist/img/user3-128x128.jpg" alt="User Image">
-
-                  <div class="comment-text">
-                    <span class="username">
-                      <?php echo $auResult[0]['name']  ?>
-                      <span class="text-muted float-right"><?php echo $cmtResult[0]['created_at']  ?></span>
-                    </span><!-- /.username -->
-                    <?php echo $cmtResult[0]['content']  ?>
-                  </div>
+                  <?php
+                    if($cmtResult){
+                  ?> 
+                    <div class="comment-text">
+                      <?php
+                        foreach ($cmtResult as $key => $value){
+                      ?>
+                      <span class="username">
+                        <?php print_r( $auResult[$key][0]['name']); ?>
+                        <span class="text-muted float-right"><?php echo $value['created_at']  ?></span>
+                      </span><!-- /.username -->
+                      <?php echo $value['content']  ?>
+                      <?php    
+                        }
+                      ?>
+                    </div>   
+                  <?php
+                  }
+                  ?>
                   <!-- /.comment-text -->
                 </div>
                 <!-- /.card-comment -->

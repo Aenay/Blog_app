@@ -18,7 +18,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="add.php" class="btn btn-success">New Blog Post</a>
+                                    <a href="/../register.php" class="btn btn-success">New User</a>
                                 </div>
                                 <div class="card-body">
                                     <?php 
@@ -31,24 +31,24 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                                     $offset = ($pageno - 1 )* $numOfrecs;
 
                                     if(empty($_POST['search'])){
-                                        $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+                                        $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
                                         $stmt->execute();
                                         $rawResult = $stmt->fetchAll();
                                         $total_pages = ceil(count($rawResult) / $numOfrecs); 
     
     
-                                        $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+                                        $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfrecs");
                                         $stmt->execute();
                                         $result = $stmt->fetchAll();
                                     }else{
                                         $searchKey = $_POST['search'];
-                                        $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+                                        $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$searchKey%' ORDER BY id DESC");
                                         $stmt->execute();
                                         $rawResult = $stmt->fetchAll();
                                         $total_pages = ceil(count($rawResult) / $numOfrecs); 
     
     
-                                        $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+                                        $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
                                         $stmt->execute();
                                         $result = $stmt->fetchAll();
                                     }
@@ -58,8 +58,9 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">#</th>
-                                                <th>Title</th>
-                                                <th>Content</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Password</th>
                                                 <th style="width: 40px">Actions</th>
                                             </tr>
                                         </thead>
@@ -71,8 +72,9 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                                             ?>
                                                 <tr>
                                                     <td><?php echo $i; ?></td>
-                                                    <td><?php echo $value['title']; ?></td>
-                                                    <td><?php echo substr($value['content'], 0, 50); ?></td>
+                                                    <td><?php echo $value['name']; ?></td>
+                                                    <td><?php echo substr($value['email'], 0, 50); ?></td>
+                                                    <td><?php echo substr($value['password'], 0, 50); ?></td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <div class="container">
