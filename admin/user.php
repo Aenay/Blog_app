@@ -81,7 +81,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                                                                 <a href="edit.php?id=<?php echo $value['id']; ?>" class="btn btn-warning">Edit</a>
                                                             </div>
                                                             <div class="container">
-                                                              <a href="delete.php?id=<?php echo $value['id']; ?>" onclick="return confirm('Are you sure you want to delete this content')" class="btn btn-danger">Delete</a>
+                                                              <a href="userdelete.php?id=<?php echo $value['id']; ?>" onclick="return confirm('Are you sure you want to delete this content')" class="btn btn-danger">Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>

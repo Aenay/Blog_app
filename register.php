@@ -2,29 +2,32 @@
 session_start();
 require 'config/config.php';
 if ($_POST) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-    
-    $stmt -> bindValue(':email',$email);
-    $stmt -> execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if($user){
-        echo "<script>alert('Email Duplicated')</script>";
-    }else{
-      $stmt = $pdo->prepare("INSERT INTO users(name,email,password)VALUES(:name,:email,:password)");
-      $result = $stmt->execute(
-        array(':name'=>$name,':email'=>$email,':password'=>$password)
-      );
-      if($result){
-        echo "<script>alert('Successfully Register,You can now login');window.location.href='login.php'</script>";
-      }
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  
+  $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+  
+  $stmt -> bindValue(':email',$email);
+  $stmt -> execute();
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  if($user){
+      echo "<script>alert('Email Duplicated')</script>";
+  }else{
+    $file= 'userimages/'.($_FILES['image']['name']);
+    $imageType=pathinfo($file,PATHINFO_EXTENSION);
+    $image = $_FILES['image']['name'];
+    move_uploaded_file($_FILES['image']['tmp_name'],$file);
+    $stmt = $pdo->prepare("INSERT INTO users(name,email,image,password)VALUES(:name,:email,:image,:password)");
+    $result = $stmt->execute(
+      array(':name'=>$name,':email'=>$email,':image'=>$image,':password'=>$password)
+    );
+    if($result){
+      echo "<script>alert('Successfully Register,You can now login');window.location.href='login.php'</script>";
     }
+  }
 }
-
 
 ?>
 
@@ -53,8 +56,8 @@ if ($_POST) {
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Register New Account</p>
-
-      <form action="register.php" method="post">
+      
+      <form action="register.php" method="post" enctype="multipart/form-data">
       <div class="input-group mb-3">
           <input type="text" name="name" class="form-control" placeholder="Name">
           <div class="input-group-append">
@@ -85,6 +88,10 @@ if ($_POST) {
           <div class="container">
             <button type="submit" class="btn btn-primary btn-block">Register</button>
             <a href="login.php" class="btn btn-default btn-block">Login</a>
+          </div>
+          <div class="form-group">
+            <label for="">Image</label><br>
+            <input type="file" name="image" value="" required>
           </div>
           <!-- /.col -->
         </div>

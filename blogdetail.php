@@ -38,6 +38,7 @@ if ($_POST) {
   
 }
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,23 +89,26 @@ if ($_POST) {
               <!-- /.card-body -->
               <div class="card-footer card-comments">
                 <div class="card-comment">
+                  
                   <!-- User image -->
                   <?php
                     if($cmtResult){
                   ?> 
-                    <div class="comment-text">
-                      <?php
-                        foreach ($cmtResult as $key => $value){
-                      ?>
-                      <span class="username">
-                        <?php print_r( $auResult[$key][0]['name']); ?>
-                        <span class="text-muted float-right"><?php echo $value['created_at']  ?></span>
-                      </span><!-- /.username -->
-                      <?php echo $value['content']  ?>
-                      <?php    
-                        }
-                      ?>
-                    </div>   
+                    
+                  <?php
+                       foreach ($cmtResult as $key => $value){
+                  ?>
+                  <div class="card-comment" style="margin: 5px;">
+                    <img class="img-fluid img-circle img-sm" src="userimages/<?php echo $auResult[$key][0]['image']?>" alt="Alt Text" >
+                    <span class="username" style="padding-left: 35px;" >
+                      <?php print_r( $auResult[$key][0]['name']); ?>
+                      <span class="text-muted float-right"><?php echo $value['created_at']  ?></span>
+                    </span><!-- /.username -->
+                    <?php echo $value['content']  ?>
+                  </div>
+                  <?php    
+                      }
+                  ?>   
                   <?php
                   }
                   ?>

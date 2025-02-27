@@ -15,8 +15,11 @@ if ($_POST) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['name'];
             $_SESSION['logged_in'] = time();
-
-            header('Location: index.php');
+            if ($user['role'] == 1) {
+                header("Location: admin/index.php"); // Redirect admin
+            } else {
+               header("Location: index.php"); // Redirect normal user
+            }
         }
     }
 

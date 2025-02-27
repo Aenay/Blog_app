@@ -130,7 +130,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
 
   <footer class="main-footer" style="margin-left: 0px !important">
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
+      <a href="logout.php" class="btn btn-danger">Logout</a>
     </div>
     <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
   </footer>
