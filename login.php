@@ -14,6 +14,7 @@ if ($_POST) {
         if($user['password'] == $password){
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['name'];
+            $_SESSION['role'] = $user['role']; 
             $_SESSION['logged_in'] = time();
             if ($user['role'] == 1) {
                 header("Location: admin/index.php"); // Redirect admin

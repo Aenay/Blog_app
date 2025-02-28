@@ -14,6 +14,7 @@ if ($_POST) {
         if($user['password'] == $password){
             if($user['role' == 1]){
               $_SESSION['user_id'] = $user['id'];
+              $_SESSION['role'] = $user['role']; 
               $_SESSION['username'] = $user['name'];
               $_SESSION['logged_in'] = time();
 

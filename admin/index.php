@@ -3,7 +3,7 @@
 require '../config/config.php';
 
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 1) {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
     echo "<script>alert('Access Denied! Admins only.'); window.location.href='../index.php';</script>";
 }
 
