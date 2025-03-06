@@ -2,29 +2,47 @@
 session_start();
 require 'config/config.php';
 if ($_POST) {
-  $name = $_POST['name'];
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  
-  $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-  
-  $stmt -> bindValue(':email',$email);
-  $stmt -> execute();
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-  if($user){
-      echo "<script>alert('Email Duplicated')</script>";
+  if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password'] < 4) || empty($_FILES['image'])){
+    if(empty($_POST['name'])){
+      $nameError = 'Name cannot be null';
+    }
+    if(empty($_POST['email'])){
+      $emailError = 'Email cannot be null';
+    }
+    if(empty($_POST['password'])){
+      $passwordError = 'Password cannot be null';
+    }
+    if(strlen($_POST['password'] < 4 )){
+      $passwordError = 'Password should be 4 characters at least ';
+    }
+    if(empty($_FILES['image'])){
+      $imageError = 'Image cannot be null';
+    }
   }else{
-    $file= 'userimages/'.($_FILES['image']['name']);
-    $imageType=pathinfo($file,PATHINFO_EXTENSION);
-    $image = $_FILES['image']['name'];
-    move_uploaded_file($_FILES['image']['tmp_name'],$file);
-    $stmt = $pdo->prepare("INSERT INTO users(name,email,image,password)VALUES(:name,:email,:image,:password)");
-    $result = $stmt->execute(
-      array(':name'=>$name,':email'=>$email,':image'=>$image,':password'=>$password)
-    );
-    if($result){
-      echo "<script>alert('Successfully Register,You can now login');window.location.href='login.php'</script>";
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+    
+    $stmt -> bindValue(':email',$email);
+    $stmt -> execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if($user){
+        echo "<script>alert('Email Duplicated')</script>";
+    }else{
+      $file= 'userimages/'.($_FILES['image']['name']);
+      $imageType=pathinfo($file,PATHINFO_EXTENSION);
+      $image = $_FILES['image']['name'];
+      move_uploaded_file($_FILES['image']['tmp_name'],$file);
+      $stmt = $pdo->prepare("INSERT INTO users(name,email,image,password)VALUES(:name,:email,:image,:password)");
+      $result = $stmt->execute(
+        array(':name'=>$name,':email'=>$email,':image'=>$image,':password'=>$password)
+      );
+      if($result){
+        echo "<script>alert('Successfully Register,You can now login');window.location.href='login.php'</script>";
+      }
     }
   }
 }
@@ -58,6 +76,7 @@ if ($_POST) {
       <p class="login-box-msg">Register New Account</p>
       
       <form action="register.php" method="post" enctype="multipart/form-data">
+      <p style="color: red;"><?php echo empty($nameError) ?'' : $nameError ?></p>
       <div class="input-group mb-3">
           <input type="text" name="name" class="form-control" placeholder="Name">
           <div class="input-group-append">
@@ -66,6 +85,7 @@ if ($_POST) {
             </div>
           </div>
         </div>
+        <p style="color: red;"><?php echo empty($emailError) ?'' : $emailError ?></p>
         <div class="input-group mb-3">
           <input type="email" name="email" class="form-control" placeholder="Email">
           <div class="input-group-append">
@@ -74,6 +94,7 @@ if ($_POST) {
             </div>
           </div>
         </div>
+        <p style="color: red;"><?php echo empty($passwordError) ?'' : $passwordError ?></p>
         <div class="input-group mb-3">
           <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
@@ -89,9 +110,10 @@ if ($_POST) {
             <button type="submit" class="btn btn-primary btn-block">Register</button>
             <a href="login.php" class="btn btn-default btn-block">Login</a>
           </div>
+          <p style="color: red;"><?php echo empty($imageError) ?'' : $imageError ?></p>
           <div class="form-group">
             <label for="">Image</label><br>
-            <input type="file" name="image" value="" required>
+            <input type="file" name="image" value="">
           </div>
           <!-- /.col -->
         </div>
