@@ -81,15 +81,15 @@ if ($_POST) {
               <div class="card-header">
                 <div style="text-align:center !important; float: none;" class="card-title">
                  
-                  <h4>Blog Title</h4>
+                  <h4><?php echo escape($result[0]['title']); ?></h4>
                 </div>
                 <!-- /.user-block -->
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <img class="img-fluid pad" src="admin/images/<?php echo $result[0]['image']?>">
+                <img class="img-fluid pad" src="admin/images/<?php echo escape($result[0]['image']); ?>">
 
-                <p><?php echo $result[0]['content'];?></p>
+                <p><?php echo escape($result[0]['content']); ?></p>
                 <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button>
                 <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
                 <span class="float-right text-muted">127 likes - 3 comments</span>
@@ -107,12 +107,12 @@ if ($_POST) {
                        foreach ($cmtResult as $key => $value){
                   ?>
                   <div class="card-comment" style="margin: 5px;">
-                    <img class="img-fluid img-circle img-sm" src="userimages/<?php echo $auResult[$key][0]['image']?>" alt="Alt Text" >
+                    <img class="img-fluid img-circle img-sm" src="userimages/<?php echo escape($auResult[$key][0]['image']); ?>" alt="Alt Text" >
                     <span class="username" style="padding-left: 35px;" >
-                      <?php print_r( $auResult[$key][0]['name']); ?>
-                      <span class="text-muted float-right"><?php echo $value['created_at']  ?></span>
+                      <?php echo escape($auResult[$key][0]['name']); ?>
+                      <span class="text-muted float-right"><?php echo escape($value['created_at']); ?></span>
                     </span><!-- /.username -->
-                    <?php echo $value['content']  ?>
+                    <?php echo escape($value['content']); ?>
                   </div>
                   <?php    
                       }
@@ -128,11 +128,11 @@ if ($_POST) {
               <!-- /.card-footer -->
               <div class="card-footer">
                 <form action="" method="post">
-                  <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo escape($_SESSION['csrf_token']); ?>">
                   <img class="img-fluid img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="Alt Text">
                   <!-- .img-push is used to add margin to elements next to floating images -->
                   <div class="img-push">
-                    <p style="color: red;"><?php echo empty($commentError) ?'' : $commentError ?></p>
+                    <p style="color: red;"><?php echo empty($commentError) ? '' : escape($commentError); ?></p>
                     <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">
                   </div>
                 </form>

@@ -2,6 +2,7 @@
 session_start();
 
 require '../config/config.php';
+require '../config/common.php';
 
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
@@ -73,9 +74,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
                                             ?>
                                                 <tr>
                                                     <td><?php echo $i; ?></td>
-                                                    <td><?php echo $value['name']; ?></td>
-                                                    <td><?php echo substr($value['email'], 0, 50); ?></td>
-                                                    <td><?php echo substr($value['password'], 0, 50); ?></td>
+                                                    <td><?php echo escape($value['name']) ?></td>
+                                                    <td><?php echo escape($value['email']) ?></td>
+                                                    <td><?php echo escape(substr($value['password'], 0, 50)) ?></td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <div class="container">

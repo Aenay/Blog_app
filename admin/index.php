@@ -1,6 +1,7 @@
 <?php 
 
 require '../config/config.php';
+require '../config/common.php';
 
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
@@ -71,8 +72,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
                                             ?>
                                                 <tr>
                                                     <td><?php echo $i; ?></td>
-                                                    <td><?php echo $value['title']; ?></td>
-                                                    <td><?php echo substr($value['content'], 0, 50); ?></td>
+                                                    <td><?php echo escape($value['title']) ?></td>
+                                                    <td><?php echo escape(substr($value['content'], 0, 50)) ?></td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <div class="container">
