@@ -11,20 +11,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
 
 
 if($_POST){
-  if(empty($_POST['title']) || empty($_POST['content']) || empty($_FILES['image'])){
-    if(empty($_POST['title'])){
-      $titleError = 'Title cannot be null';
+  if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password'] < 4)){
+    if(empty($_POST['name'])){
+      $titleError = 'Name cannot be null';
     }
-    if(empty($_POST['content'])){
-      $contentError = 'Content cannot be null';
+    if(empty($_POST['email'])){
+      $contentError = 'Email cannot be null';
     }
-    if(empty($_FILES['image'])){
-      $imageError = 'Image cannot be null';
+    if(empty($_POST['password'])){
+        $imageError = 'Password cannot be null';
+    }
+    if(strlen($_POST['password'] < 4 )){
+        $passwordError = 'Password should be 4 characters at least ';
     }
   }else{
     $id = $_POST['id'];
-    $title = $_POST['title'];
-    $content = $_POST['content'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password  = password_hash($_POST['password'],PASSWORD_DEFAULT);
     
     if($_FILES['image']['name'] != null){
         $file= 'images/'.($_FILES['image']['name']);
@@ -37,7 +41,7 @@ if($_POST){
           $image = $_FILES['image']['name'];
           move_uploaded_file($_FILES['image']['tmp_name'],$file);
       
-            $stmt = $pdo->prepare("UPDATE posts SET title='$title',content='$content',image='$image' WHERE id='$id'");
+            $stmt = $pdo->prepare("UPDATE users SET name='$name',email='$email',image='$image',password = '$password' WHERE id='$id'");
             $result = $stmt->execute();
           if($result){
             echo "<script>alert('Successfully added');window.location.href='index.php'</script>";
@@ -47,10 +51,10 @@ if($_POST){
         }
 
     }else{
-        $stmt = $pdo->prepare("UPDATE posts SET title='$title',content='$content' WHERE id='$id'");
+        $stmt = $pdo->prepare("UPDATE users SET name='$name',email='$email',password= '$password' WHERE id='$id'");
         $result = $stmt->execute();
          if($result){
-                echo "<script>alert('Successfully added');window.location.href='index.php'</script>";
+                echo "<script>alert('Successfully added');window.location.href='user.php'</script>";
            }
     }
 
@@ -58,7 +62,7 @@ if($_POST){
     
         
 }
-$stmt = $pdo->prepare("SELECT * FROM posts WHERE id=".$_GET['id']);
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id=".$_GET['id']);
 $stmt->execute();
 $result = $stmt->fetchAll();
 ?>
@@ -75,18 +79,23 @@ $result = $stmt->fetchAll();
                       <div class="card">
                         <div class="card-body">
                         <form class="" action="" method="post" enctype="multipart/form-data">
-                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <div class="form-group">
                                 <input type="hidden" name="id" value="<?php echo $result[0]['id']?>">
-                                <label for="">Title</label><p style="color: red;"><?php echo empty($titleError) ?'' : $titleError ?></p>
-                                <input type="text" class="form-control" name="title" value="<?php echo $result[0]['title']?>" >
+                                <label for="">Name</label><p style="color: red;"><?php echo empty($nameError) ?'' : $nameError ?></p>
+                                <input type="text" class="form-control" name="name" value="<?php echo $result[0]['name']?>" >
                             </div>
                             <div class="form-group">
-                                <label for="">Content</label><br><p style="color: red;"><?php echo empty($contentError) ?'' : $contentError ?></p>
-                                <textarea class="form-control" name="content" rows="8" cols="88"><?php echo $result[0]['content']?></textarea>
+                                <label for="">Email</label><br><p style="color: red;"><?php echo empty($emailError) ?'' : $emailError ?></p>
+                                <input class="form-control" name="email" value="<?php echo $result[0]['email']?>">
                             </div>
                             <div class="form-group">
-                                <label for="">Image</label><br><p style="color: red;"><?php echo empty($imageError) ?'' : $imageError ?></p>
+                                <input type="hidden" name="id" value="<?php echo $result[0]['password']?>">
+                                <label for="">Password</label><p style="color: red;"><?php echo empty($passwordError) ?'' : $passwordError ?></p>
+                                <input class="form-control" name="password" value="" >
+                            </div>
+                            <div class="form-group">
+                                <label for="">Image</label><br><p style="color: red;">
                                 <img src="images/<?php echo $result[0]['image']?>" width="150" height="150"><br><br>
                                 <input type="file" name="image" value="">
                             </div>

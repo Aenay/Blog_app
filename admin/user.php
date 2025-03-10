@@ -1,8 +1,9 @@
 <?php 
+session_start();
 
 require '../config/config.php';
 
-session_start();
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
     echo "<script>alert('Access Denied! Admins only.'); window.location.href='../index.php';</script>";
 }
@@ -18,7 +19,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="/../register.php" class="btn btn-success">New User</a>
+                                    <a href="adduser.php" class="btn btn-success">New User</a>
                                 </div>
                                 <div class="card-body">
                                     <?php 
@@ -78,7 +79,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
                                                     <td>
                                                         <div class="btn-group">
                                                             <div class="container">
-                                                                <a href="edit.php?id=<?php echo $value['id']; ?>" class="btn btn-warning">Edit</a>
+                                                                <a href="edituser.php?id=<?php echo $value['id']; ?>" class="btn btn-warning">Edit</a>
                                                             </div>
                                                             <div class="container">
                                                               <a href="userdelete.php?id=<?php echo $value['id']; ?>" onclick="return confirm('Are you sure you want to delete this content')" class="btn btn-danger">Delete</a>

@@ -1,6 +1,9 @@
 <?php 
-require 'config/config.php';
 session_start();
+require 'config/config.php';
+require 'config/common.php';
+
+
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
   header('Location: login.php');
 }
@@ -125,6 +128,7 @@ if ($_POST) {
               <!-- /.card-footer -->
               <div class="card-footer">
                 <form action="" method="post">
+                  <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                   <img class="img-fluid img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="Alt Text">
                   <!-- .img-push is used to add margin to elements next to floating images -->
                   <div class="img-push">
